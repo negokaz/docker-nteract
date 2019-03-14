@@ -12,5 +12,5 @@ USER $NB_USER
 WORKDIR ${HOME}/work
 EXPOSE 8888
 
-ENTRYPOINT ["/usr/local/bin/start.sh", "jupyter", "nteract"]
-CMD []
+ENTRYPOINT ["/usr/local/bin/start.sh", "jupyter"]
+CMD ["nteract"]

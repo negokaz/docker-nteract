@@ -11,7 +11,7 @@ RUN set -xe; \
     yarn install; \
     cd applications/jupyter-extension/; \
     yarn build:python; \
-    cp dist/nteract_on_jupyter-${NTERACT_ON_JUPYTER_VERSION}-py3-none-any.whl ${HOME}/nteract_on_jupyter.whl \
+    cp dist/nteract_on_jupyter-${NTERACT_ON_JUPYTER_VERSION}-py3-none-any.whl ${HOME}/nteract_on_jupyter.whl;
 
 ################################################################################
 

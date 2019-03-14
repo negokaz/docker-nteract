@@ -1,8 +1,10 @@
 FROM jupyter/minimal-notebook:latest
 
+ARG NTERACT_VERSION="2.0.6"
+
 USER root
 RUN set -xe; \
-    pip install nteract_on_jupyter; \
+    pip install nteract_on_jupyter==$NTERACT_VERSION; \
     jupyter serverextension enable nteract_on_jupyter; \
     : disable authentication; \
     echo "c.NotebookApp.token = ''"    >> ${HOME}/.jupyter/jupyter_notebook_config.py; \

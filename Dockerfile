@@ -11,17 +11,19 @@ RUN set -xe; \
     yarn install; \
     cd applications/jupyter-extension/; \
     yarn build:python; \
-    cp dist/nteract_on_jupyter-${NTERACT_ON_JUPYTER_VERSION}-py3-none-any.whl ${HOME}/nteract_on_jupyter.whl;
+    mv dist/nteract_on_jupyter-${NTERACT_ON_JUPYTER_VERSION}-py3-none-any.whl ${HOME}/nteract_on_jupyter-${NTERACT_ON_JUPYTER_VERSION}-py3-none-any.whl;
 
 ################################################################################
 
 FROM jupyter/minimal-notebook:latest
 
+ARG NTERACT_ON_JUPYTER_VERSION="2.0.7"
+
 USER $NB_USER
-COPY --from=build-stage ${HOME}/nteract_on_jupyter.whl .
+COPY --from=build-stage ${HOME}/nteract_on_jupyter-${NTERACT_ON_JUPYTER_VERSION}-py3-none-any.whl .
 RUN set -xe; \
-    pip install nteract_on_jupyter.whl; \
-    rm nteract_on_jupyter.whl; \
+    pip install nteract_on_jupyter-${NTERACT_ON_JUPYTER_VERSION}-py3-none-any.whl; \
+    rm nteract_on_jupyter-${NTERACT_ON_JUPYTER_VERSION}-py3-none-any.whl; \
     jupyter serverextension enable nteract_on_jupyter; \
     : disable authentication; \
     echo "c.NotebookApp.token = ''"    >> ${HOME}/.jupyter/jupyter_notebook_config.py; \

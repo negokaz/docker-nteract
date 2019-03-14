@@ -20,8 +20,8 @@ FROM jupyter/minimal-notebook:latest
 USER $NB_USER
 COPY --from=build-stage ${HOME}/nteract_on_jupyter.whl .
 RUN set -xe; \
-    pip install ${HOME}/nteract_on_jupyter.whl; \
-    rm ${HOME}/nteract_on_jupyter.whl; \
+    pip install nteract_on_jupyter.whl; \
+    rm nteract_on_jupyter.whl; \
     jupyter serverextension enable nteract_on_jupyter; \
     : disable authentication; \
     echo "c.NotebookApp.token = ''"    >> ${HOME}/.jupyter/jupyter_notebook_config.py; \

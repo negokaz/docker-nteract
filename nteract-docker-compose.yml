@@ -1,0 +1,8 @@
+version: '3'
+services:
+  nteract:
+    image: negokaz/nteract@sha256:3d333a015a44e37c384ecf9497fd857518333cf56f6a1e6faf5cb0116fbf7433
+    ports:
+      - ${BIND_IP:-127.0.0.1}:${BIND_PORT:-8888}:8888
+    volumes:
+      - ./work:/home/jovyan/work

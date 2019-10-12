@@ -1,0 +1,13 @@
+version: '3'
+services:
+  nteract:
+    image: negokaz/nteract
+    build: .
+    ports:
+      - ${BIND_IP:-127.0.0.1}:${BIND_PORT:-8888}:8888
+    volumes:
+      - ../work:/home/jovyan/work
+    environment:
+      - http_proxy
+      - https_proxy
+

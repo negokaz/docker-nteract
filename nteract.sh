@@ -1,33 +1,55 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/docker"
 
 [ -f .env ] && source .env
 
-url="http://${BIND_IP:-127.0.0.1}:${BIND_PORT:-8888}"
+function main {
+  case "$1" in
+    'build' ) build ;;
+    *)        start ;;
+  esac
+}
 
+function start {
+  {
+    url="http://${BIND_IP:-127.0.0.1}:${BIND_PORT:-8888}"
 
-if which start > /dev/null 2>&1; then
-  # for windows
-  start "${url}"
-elif which open > /dev/null 2>&1; then
-  # for mac
-  open "${url}"
-elif which xdg-open > /dev/null 2>&1; then
-  # for linux
-  xdg-open "${url}"
-else
-  cat <<EOS
+    timeout 300 bash -c "until curl -s '${url}'; do sleep 3; done"
 
-Please open the following URL in your browser:
+    if which start &> /dev/null; then
+      # for windows
+      start "${url}"
+    elif which open &> /dev/null; then
+      # for mac
+      open "${url}"
+    elif which xdg-open &> /dev/null; then
+      # for linux
+      xdg-open "${url}"
+    else
+      echo
+      echo 'Please open the following URL in your browser:'
+      echo 
+      echo "${url}"
+      echo
+    fi
+  } &
 
-${url}
+  trap on_start_exit EXIT
 
-EOS
-fi
+  docker-compose up
+}
 
-compose_file="nteract-docker-compose.yml"
+function on_start_exit {
+  docker-compose down
+  /usr/bin/env kill -PIPE -- -$$
+}
 
-trap "docker-compose --file '${compose_file}' down" EXIT
+function build {
+  docker-compose build \
+    ${http_proxy:+"--build-arg 'http_proxy=${http_proxy}'"} \
+    ${https_proxy:+"--build-arg 'https_proxy=${https_proxy}'"} \
+    --no-cache
+}
 
-docker-compose --file "${compose_file}" up
+main "$@"

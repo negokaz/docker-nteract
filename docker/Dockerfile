@@ -1,6 +1,6 @@
 FROM jupyter/minimal-notebook:latest
 
-ARG NTERACT_ON_JUPYTER_VERSION="2.0.7"
+ARG NTERACT_ON_JUPYTER_VERSION="2.1.3"
 
 RUN set -xe; \
     pip install nteract_on_jupyter==${NTERACT_ON_JUPYTER_VERSION}; \

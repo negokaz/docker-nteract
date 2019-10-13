@@ -15,7 +15,10 @@ function start {
   {
     url="http://${BIND_IP:-127.0.0.1}:${BIND_PORT:-8888}"
 
-    timeout 300 bash -c "until curl -s '${url}'; do sleep 3; done"
+    seq 300 | while read i && ! curl -s "${url}"
+    do
+      sleep 1
+    done
 
     if which start &> /dev/null; then
       # for windows

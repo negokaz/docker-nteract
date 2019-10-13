@@ -10,4 +10,5 @@ services:
     environment:
       - http_proxy
       - https_proxy
+    command: ["${mode:-nteract}"] 
 
